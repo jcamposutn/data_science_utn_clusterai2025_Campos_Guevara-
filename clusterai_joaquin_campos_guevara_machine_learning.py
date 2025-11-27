@@ -1,13 +1,18 @@
 import pickle
+from joblib import load
+import pandas as pd
 import numpy as np
 from sklearn.metrics import mean_squared_error, r2_score
 
 # primero cargamos los modelos entrenados previamente
-with open("modelo_PL1.pkl", "rb") as f:
-    PL1 = pickle.load(f)
+PL1 = load("modelo_PL1.pkl")
+PL2_optimo = load("modelo_PL2.pkl")
 
-with open("modelo_PL2.pkl", "rb") as f:
-    PL2_optimo = pickle.load(f)
+
+# ahora cargamos la particion que hicimos previamente
+x_test = pd.read_pickle("x_test.pkl")
+y_test = pd.read_pickle("y_test.pkl")
+
 
 # ahora hacemos las predicciones utilizando ambos modelos y la porción del DF que separamos previamente para testear
 y_pred_PL1 = PL1.predict(x_test)

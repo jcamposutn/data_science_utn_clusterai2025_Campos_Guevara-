@@ -94,3 +94,9 @@ from joblib import dump
 # guardamos los modelos entrenados
 dump(PL1, "modelo_PL1.pkl")
 dump(PL2_optimo, "modelo_PL2.pkl")
+# guardamos la particion del df para predecir en otro archivo más limpio
+x_train.to_pickle("x_train.pkl")
+x_test.to_pickle("x_test.pkl")
+y_train.to_pickle("y_train.pkl")
+y_test.to_pickle("y_test.pkl")
+

@@ -16,6 +16,9 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.decomposition import PCA
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.feature_selection import VarianceThreshold
+# ahora importamos el dataframe que procesamos en el EDA
+import pandas as pd
+airbnb_df = pd.read_csv("airbnb_df.csv")
 # ahora procedemos a dividir el dataframe entre variables independientes 'X' y dependientes 'Y'
 y = airbnb_df['price']
 x = airbnb_df.drop(columns=['price'])
@@ -85,3 +88,9 @@ print(f"PL2  RMSE= {rmse_PL2:.2f} -- R2: {r2_PL2:.3f}")
 
 print(f"PL1 modelo de Regresion Lineal      -> RMSE= {rmse_PL1:.2f} -- R2= {r2_PL1:.3f}")
 print(f"PL2 modelo Gradient Boosting + PCA  -> RMSE= {rmse_PL2:.2f} -- R2= {r2_PL2:.3f}")
+
+# para guardar los modelos entrenados usamos la siguiente librería
+from joblib import dump
+# guardamos los modelos entrenados
+dump(PL1, "modelo_PL1.pkl")
+dump(PL2_optimo, "modelo_PL2.pkl")

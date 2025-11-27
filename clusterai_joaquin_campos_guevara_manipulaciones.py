@@ -18,6 +18,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.feature_selection import VarianceThreshold
 # ahora importamos el dataframe que procesamos en el EDA
 import pandas as pd
+import numpy as np
 airbnb_df = pd.read_csv("airbnb_df.csv")
 # ahora procedemos a dividir el dataframe entre variables independientes 'X' y dependientes 'Y'
 y = airbnb_df['price']

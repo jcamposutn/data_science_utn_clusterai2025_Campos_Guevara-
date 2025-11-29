@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.metrics import mean_squared_error, r2_score
 
 # primero cargamos los modelos entrenados previamente
-PL1 = load("modelo_PL1.pkl")
+PL1_optimo = load("modelo_PL1.pkl")
 PL2_optimo = load("modelo_PL2.pkl")
 
 
@@ -15,7 +15,7 @@ y_test = pd.read_pickle("y_test.pkl")
 
 
 # ahora hacemos las predicciones utilizando ambos modelos y la porción del DF que separamos previamente para testear
-y_pred_PL1 = PL1.predict(x_test)
+y_pred_PL1 = PL1_optimo.predict(x_test)
 mse_PL1 = mean_squared_error(y_test, y_pred_PL1)
 rmse_PL1 = np.sqrt(mse_PL1)
 r2_PL1 = r2_score(y_test, y_pred_PL1)

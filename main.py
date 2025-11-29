@@ -24,11 +24,11 @@ with open(log_file, "w") as log:
             )
 # Si corre el EDA, no queremos que imprima  todas las comprobaciones realizadas en el script. solo nos interesa que confirme que corrió correctamente
 # en cambio, sí nos interesa guardar el output del resto de los scripts en el log
-    if "clusterai_joaquin_campos_guevara_eda.py" in script.lower():
-    log.write("EDA ejecutado exitosamente y airbnb_df limpio")
-    else:
-            log.write(result.stdout)
-            log.write(result.stderr)
-            log.write(f"\n=== Finalizado {script} ===\n")
-    except Exception as e:
+                if "clusterai_joaquin_campos_guevara_eda.py" in script.lower():
+                    log.write("EDA ejecutado exitosamente y airbnb_df limpio")
+                else:
+                    log.write(result.stdout)
+                    log.write(result.stderr)
+                    log.write(f"\n=== Finalizado {script} ===\n")
+        except Exception as e:
             log.write(f"Error al ejecutar {script}: {e}\n")

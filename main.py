@@ -25,7 +25,9 @@ with open(log_file, "w") as log:
 
             # Si corre el EDA, no queremos que imprima todas las comprobaciones realizadas
             if "clusterai_joaquin_campos_guevara_eda.py" in script.lower():
-                log.write("EDA ejecutado exitosamente y airbnb_df limpio\n")
+                log.write("Limpieza y transformacion del dataframe airbnb_df \n")
+            elif "clusterai_joaquin_campos_guevara_manipulaciones.py" in script.lower():
+                log.write("Se entrenó a ambos modelos de ML con los datos \n")
             else:
                 log.write(result.stdout)
                 log.write(result.stderr)

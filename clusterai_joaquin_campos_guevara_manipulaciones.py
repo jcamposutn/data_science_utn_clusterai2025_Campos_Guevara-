@@ -5,11 +5,10 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.utils import shuffle
 from sklearn.preprocessing import StandardScaler
-from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
 from sklearn.linear_model import LinearRegression, Lasso
 from sklearn.svm import SVR, LinearSVR
-from sklearn.metrics import mean_squared_error, make_scorer
+from sklearn.metrics import make_scorer
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.feature_selection import SelectFromModel
@@ -29,7 +28,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_
 
 # primero ejecutaremos sin reduccion de dimensionalidad en el pipeline1 o 'PL1'
 # al finalizar, haremos otra prediccion en el pipeline2 o 'PL2' esta vez reduciendo la dimensionalidad
-# usaremos la funcion 'Pipline' de sklearn para ordenar la ejecucion del codigo
+# usaremos la funcion 'Pipeline' de sklearn para ordenar la ejecucion del codigo
 
 PL1 = Pipeline(steps=[
     ('scaler', StandardScaler()),
@@ -37,23 +36,15 @@ PL1 = Pipeline(steps=[
 ])
 # una vez escalados los datos y habiendo definido el modelo, lo entrenamos
 PL1.fit(x_train, y_train)
-# obtenemos las predicciones del modelo
-y_pred_PL1 = PL1.predict(x_test)
-# el modelo PL1 tiene el siguiente score:
-mse_PL1 = mean_squared_error(y_test, y_pred_PL1)
-rmse_PL1 = np.sqrt(mse_PL1)
-r2_PL1 = r2_score(y_test, y_pred_PL1)
-print(f"PL1  RMSE= {rmse_PL1:.2f} -- R2: {r2_PL1:.3f}")
-
 
 # para el PL2 vamos a probar otro modelo más complejo con la esperanza de que mejore el score del PL1
 # al tener tantas dummies para las var categoricas, la dimensionalidad del df es elevada y seguramente requiere una reduccion.
 
 # ahora ejecutaremos el PL2 utilizando la tecnica de Gradient Boosting con reduccion de dimensionalidad PCA
 # en el scaler usamos with_mean=False por las variables dummies que explican las variables categoricas
-# antes del entrenamiento usamos threshold 0.1 para eliminar las variables casi nulas que no son relevantes. esto va a agilizar el proceso
+# antes del entrenamiento usamos threshold 0.01 para eliminar las variables casi nulas que no son relevantes. esto va a agilizar el proceso
 # para la reduccion fijamos los componentes a conciderar en 100 para capturar una buena porcion de la varianza de la variable 'price'
-# fijamos el nuemro de arboles en 100 con n_estimators y una complejidad de 3 niveles con max_deph
+# fijamos el nuemro de arboles en 100 con n_estimators y una complejidad de 3 niveles con max_depth
 PL2 = Pipeline([
     ('scaler', StandardScaler(with_mean=False)),
     ('var_thresh', VarianceThreshold(threshold=0.01)),
@@ -75,20 +66,9 @@ grid_PL2 = GridSearchCV(
 )
 grid_PL2.fit(x_train, y_train)
 
-
 print("Mejores parámetros encontrado con el modelo de PL2:", grid_PL2.best_params_)
 # guardamos en una variable el mejor modelo resultado del gridsearch en PL2
 PL2_optimo = grid_PL2.best_estimator_
-# obtenemos las predicciones del modelo PL2_optimo, es decir entrenado con los mejores parametros
-y_pred_PL2 = PL2_optimo.predict(x_test)
-# el modelo PL2 tiene el siguiente score:
-mse_PL2 = mean_squared_error(y_test, y_pred_PL2)
-rmse_PL2 = np.sqrt(mse_PL2)
-r2_PL2 = r2_score(y_test, y_pred_PL2)
-print(f"PL2  RMSE= {rmse_PL2:.2f} -- R2: {r2_PL2:.3f}")
-
-print(f"PL1 modelo de Regresion Lineal      -> RMSE= {rmse_PL1:.2f} -- R2= {r2_PL1:.3f}")
-print(f"PL2 modelo Gradient Boosting + PCA  -> RMSE= {rmse_PL2:.2f} -- R2= {r2_PL2:.3f}")
 
 # para guardar los modelos entrenados usamos la siguiente librería
 from joblib import dump
